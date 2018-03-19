@@ -6,7 +6,7 @@
 * 这里采用了toBlob和toDataURL两种方法处理图片信息。
 * 由于toBlob有兼容性问题所以引入了canvas-to-blob。
 
-###使用方法
+## 使用方法
 
 1. 引入相关依赖
 ~~~
