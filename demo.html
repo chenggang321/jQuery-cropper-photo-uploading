@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片裁剪上传插件</title>
+    <link rel="stylesheet" href="cropper/css/cropper.min.css">
+    <style>
+        .cropper-mask {
+            display: none;
+            background: #fff;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1010;
+        }
+        .img-container{
+            max-height: 500px;
+            max-width: 750px;
+        }
+        .mt-b-20 {
+            margin:20px;
+        }
+        .output-img,.close,#btn{
+            display: inline-block;
+            height: 38px;
+            line-height: 38px;
+            padding: 0 18px;
+            background-color: #009688;
+            color: #fff;
+            white-space: nowrap;
+            text-align: center;
+            font-size: 14px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            opacity: .9;
+            filter: alpha(opacity=90);
+        }
+    </style>
+</head>
+<body>
+<form id="myForm">
+    <img src="images/Chrysanthemum.jpg" onclick="openCropper(this,'imgUrl1','1')" style="width:500px;height:500px;">
+</form>
+<div class="cropper-mask" id="changeModal" style="position: absolute;top:0;left:0;"></div>
+<button id="btn">提交</button>
+<script src="js/jquery-1.7.min.js"></script>
+<script src="cropper/js/cropper.min.js"></script>
+<script src="cropper/js/canvas-to-blob.js"></script>
+<script src="js/cropperMain.js"></script>
+<script>
+    var myForm = document.getElementById("myForm");
+    var formData = new FormData(myForm);
+    function openCropper(imgDom, userImgId, aspectRatio) {
+        var fileName = userImgId + '.png';
+        $('#changeModal').show();
+        $(imgDom).myCropper({
+            id: userImgId,
+            aspectRatio: aspectRatio,
+            getImgFn: function (cropperImgData) {
+                formData.set(userImgId, cropperImgData, fileName);
+            }
+        });
+    }
+    $('#btn').on('click', function () {
+        $.ajax({
+            url: "上传图片url",
+            type: "post",
+            data: formData,
+            processData: false,  // 告诉jQuery不要去处理发送的数据
+            contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
+            success: function (response, status, xhr) {
+                console.log(response, status, xhr);
+            }
+        });
+    });
+</script>
+</body>
+</html>
